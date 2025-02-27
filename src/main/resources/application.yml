@@ -1,0 +1,60 @@
+# src/main/resources/application.yml
+server:
+  port: 8080
+
+spring:
+  application:
+    name: security-demo
+  
+  # Database configuration
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+  
+  # Spring Security configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/auth/realms/security-demo
+          jwk-set-uri: http://localhost:8180/auth/realms/security-demo/protocol/openid-connect/certs
+
+# Keycloak configuration
+keycloak:
+  admin:
+    username: admin
+    password: admin
+    client-id: admin-cli
+  realm: security-demo
+  auth-server-url: http://localhost:8180/auth
+  ssl-required: external
+  resource: security-demo-app
+  credentials:
+    secret: zEKlFSU7lpuIJdOqSb8N3XtmMJu3ISCC
+  use-resource-role-mappings: true
+  bearer-only: true
+
+
+# Logging configuration
+logging:
+  level:
+    org.springframework.security.oauth2: TRACE
+    org.springframework.security.jwt: TRACE
+    org.springframework.security: DEBUG
+    org.keycloak: DEBUG
+    com.postgrad.securitydemo.config: DEBUG
